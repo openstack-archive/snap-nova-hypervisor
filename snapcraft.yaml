@@ -1,0 +1,112 @@
+name: nova-hypervisor
+version: ocata
+summary: OpenStack Compute Service - KVM Hypervisor (nova)
+description: |
+  OpenStack Nova provides a cloud computing fabric controller,
+  supporting a wide variety of compute technologies, including
+  .
+    libvirt (KVM, Xen, LXC and more),
+    LXD
+    Hyper-V
+    VMware
+    XenServer
+    OpenStack Ironic.
+  .
+  This snap provides the hypervisor component of an OpenStack
+  deployment, configured to use Libvirt/KVM + Open vSwitch.
+confinement: strict
+grade: devel
+
+apps:
+  nova-compute:
+    command: snap-openstack nova-compute
+    daemon: simple
+    plugs:
+      - network
+      - network-control
+      - firewall-control
+      - system-trace
+      - libvirt
+  neutron-openvswitch-agent:
+    command: snap-openstack neutron-openvswitch-agent
+    daemon: simple
+    plugs:
+      - network
+      - network-bind
+      - network-control
+      - firewall-control
+      - process-control
+      - system-trace
+      - system-observe
+  openvswitch:
+    command: ovs-wrapper $SNAP/share/openvswitch/scripts/ovs-ctl start --system-id=random
+    stop-command: ovs-wrapper $SNAP/share/openvswitch/scripts/ovs-ctl stop
+    daemon: forking
+    plugs:
+      - network
+      - network-bind
+      - network-control
+      - openvswitch-support
+      - process-control
+      - system-trace
+  ovs-vsctl:
+    command: ovs-wrapper $SNAP/bin/ovs-vsctl
+    plugs:
+      - network
+  ovs-appctl:
+    command: ovs-wrapper $SNAP/bin/ovs-appctl
+    plugs:
+      - network
+  ovs-ofctl:
+    command: ovs-wrapper $SNAP/bin/ovs-ofctl
+    plugs:
+      - network
+  ovs-dpctl:
+    command: ovs-wrapper $SNAP/bin/ovs-dpctl
+    plugs:
+      - network
+parts:
+  openvswitch:
+    source: http://openvswitch.org/releases/openvswitch-2.6.1.tar.gz
+    plugin: autotools
+    build-packages:
+      - libssl-dev
+      - libnuma-dev
+      - python-all
+      - python-six
+      - python-setuptools
+    stage-packages:
+      - uuid-runtime
+    configflags:
+      - "--localstatedir=/var/snap/$SNAPCRAFT_PROJECT_NAME/common"
+      - "--sysconfdir=/var/snap/$SNAPCRAFT_PROJECT_NAME/etc"
+  nova:
+    after:
+      - openvswitch
+    plugin: python
+    python-version: python2
+    source: http://tarballs.openstack.org/nova/nova-master.tar.gz
+    python-packages:
+      - pymysql
+      - libvirt-python
+      - python-memcached
+      - http://tarballs.openstack.org/neutron/neutron-master.tar.gz
+      - http://tarballs.openstack.org/nova-lxd/nova-lxd-master.tar.gz
+      - git+https://github.com/openstack-snaps/snap.openstack#egg=snap.openstack
+    constraints: https://raw.githubusercontent.com/openstack/requirements/master/upper-constraints.txt
+    build-packages:
+      - libffi-dev
+      - libssl-dev
+      - libxml2-dev
+      - libxslt1-dev
+      - libvirt-dev
+      - pkg-config
+      - gcc
+    stage-packages:
+      - qemu-utils
+  templates:
+    after:
+      - nova
+      - openvswitch
+    plugin: dump
+    source: snap
