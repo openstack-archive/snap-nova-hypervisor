@@ -27,6 +27,7 @@ apps:
       - firewall-control
       - system-trace
       - libvirt
+      - openvswitch
   neutron-openvswitch-agent:
     command: snap-openstack neutron-openvswitch-agent
     daemon: simple
@@ -38,6 +39,7 @@ apps:
       - process-control
       - system-trace
       - system-observe
+      - openvswitch
   neutron-l3-agent:
     command: snap-openstack neutron-l3-agent
     daemon: simple
@@ -48,6 +50,7 @@ apps:
       - process-control
       - system-trace
       - system-observe
+      - openvswitch
   neutron-dhcp-agent:
     command: snap-openstack neutron-dhcp-agent
     daemon: simple
@@ -57,6 +60,7 @@ apps:
       - process-control
       - system-trace
       - system-observe
+      - openvswitch
   neutron-metadata-agent:
     command: snap-openstack neutron-metadata-agent
     daemon: simple
@@ -69,6 +73,7 @@ apps:
     plugs:
       - network
       - network-control
+      - openvswitch
   neutron-netns-cleanup:
     command: snap-openstack neutron-netns-cleanup
     plugs:
