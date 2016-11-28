@@ -54,7 +54,6 @@ apps:
     plugs:
       - network
       - network-control
-      - firewall-control
       - process-control
       - system-trace
       - system-observe
@@ -75,148 +74,22 @@ apps:
     plugs:
       - network
       - network-control
-  openvswitch:
-    command: ovs-wrapper $SNAP/share/openvswitch/scripts/ovs-ctl start --system-id=random
-    stop-command: ovs-wrapper $SNAP/share/openvswitch/scripts/ovs-ctl stop
-    daemon: forking
-    plugs:
-      - network
-      - network-bind
-      - network-control
-      - openvswitch-support
-      - process-control
-      - system-trace
-  ovs-vsctl:
-    command: ovs-wrapper $SNAP/bin/ovs-vsctl
-    plugs:
-      - network
-  ovs-appctl:
-    command: ovs-wrapper $SNAP/bin/ovs-appctl
-    plugs:
-      - network
-  ovs-ofctl:
-    command: ovs-wrapper $SNAP/bin/ovs-ofctl
-    plugs:
-      - network
-  ovs-dpctl:
-    command: ovs-wrapper $SNAP/bin/ovs-dpctl
-    plugs:
-      - network
-  libvirt-bin:
-    command: libvirt-wrapper $SNAP/sbin/libvirtd
-    daemon: simple
-    plugs:
-      - network
-      - network-bind
-      - network-control
-  virtlockd:
-    command: libvirt-wrapper $SNAP/sbin/virtlockd
-    daemon: simple
-    plugs:
-      - network
-      - network-bind
-      - network-control
-  virtlogd:
-    command: libvirt-wrapper $SNAP/sbin/virtlogd
-    daemon: simple
-    plugs:
-      - network
-      - network-bind
-      - network-control
-  virsh:
-    command: bin/virsh
-    plugs:
-      - network
 parts:
-  qemu:
-    source: http://wiki.qemu-project.org/download/qemu-2.7.0.tar.bz2
-    plugin: autotools
+  dnsmasq:
+    source: http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.76.tar.xz
+    plugin: make
     build-packages:
-      - libaio-dev
-      - acpica-tools
-      - libasound2-dev
-      - libattr1-dev
-      - libcap-dev
-      - libcap-ng-dev
-      - libiscsi-dev
-      - libnuma-dev
-      - librados-dev
-      - librbd-dev
-      - libspice-server-dev
-      - libspice-protocol-dev
-      - libusb-1.0-0-dev
-      - libusbredirparser-dev
-      - zlib1g-dev
-      - uuid-dev
-    configflags:
-        - "--target-list=x86_64-softmmu i386-softmmu"
-        - "--prefix=/snap/$SNAPCRAFT_PROJECT_NAME/current"
+      - libnetfilter-conntrack-dev
+      - libidn11-dev
+      - libgmp-dev
+      - nettle-dev
     organize:
-      # Hack to shift installed qemu back to root of snap
-      # required to ensure that pathing to files etc works at
-      # runtime
-      "snap/nova-hypervisor/current/*": ""
+      usr/local/sbin/dnsmasq: bin/dnsmasq
     filesets:
-      all:
-        - -snap
-    stage: [$all]
-    snap: [$all]
-  libvirt:
-    after: [qemu]
-    source: https://libvirt.org/sources/libvirt-2.4.0.tar.xz
-    plugin: autotools
-    build-packages:
-      - libxml2-dev
-      - libcurl4-gnutls-dev
-      - libncurses5-dev
-      - libreadline-dev
-      - zlib1g-dev
-      - libgcrypt20-dev
-      - libgnutls28-dev
-      - libsasl2-dev
-      - libsanlock-dev
-      - libiscsi-dev
-      - librbd-dev
-      - librados-dev
-      - libyajl-dev
-      - libpcap0.8-dev
-      - libaudit-dev
-      - libdevmapper-dev
-      - libpciaccess-dev
-      - libnl-3-dev
-      - libnl-route-3-dev
-      - libpolkit-gobject-1-dev
-      - uuid-dev
-      - libnuma-dev
-      - python-all
-      - python-six
-    configflags:
-      - "--with-qemu"
-      - "--without-xen"
-      - "--without-openvz"
-      - "--without-vmware"
-      - "--without-xenapi"
-      - "--without-esx"
-      - "--without-hyperv"
-      - "--without-lxc"
-      - "--without-vz"
-      - "--without-vbox"
-      - "--without-uml"
-      - "--without-sasl"
-      - "--prefix=/snap/$SNAPCRAFT_PROJECT_NAME/current"
-      - "--localstatedir=/var/snap/$SNAPCRAFT_PROJECT_NAME/common/run"
-      - "--sysconfdir=/var/snap/$SNAPCRAFT_PROJECT_NAME/common/etc"
-    organize:
-      # Hack to shift installed libvirt back to root of snap
-      # required to ensure that pathing to files etc works at
-      # runtime
-      "snap/nova-hypervisor/current/*": ""
-      "var/snap/nova-hypervisor/common/*": ""
-    filesets:
-      all:
-        - -snap
-    stage: [$all]
-    snap: [$all]
+      bin:
+        - bin/dnsmasq
+    stage: [$bin]
+    snap: [$bin]
   openvswitch:
     source: http://openvswitch.org/releases/openvswitch-2.6.1.tar.gz
     plugin: autotools
@@ -228,9 +101,13 @@ parts:
       - python-setuptools
     stage-packages:
       - uuid-runtime
-    configflags:
-      - "--localstatedir=/var/snap/$SNAPCRAFT_PROJECT_NAME/common"
-      - "--sysconfdir=/var/snap/$SNAPCRAFT_PROJECT_NAME/etc"
+    filesets:
+      bin:
+        - bin/ovs-*ctl
+        - bin/ovsdb-tool
+        - bin/ovsdb-client
+    stage: [$bin]
+    snap: [$bin]
   nova:
     after:
       - openvswitch
@@ -258,9 +135,6 @@ parts:
   templates:
     after:
       - nova
-      - qemu
-      - libvirt
-      - openvswitch
     plugin: dump
     source: snap
   config-nova:
