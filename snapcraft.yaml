@@ -29,6 +29,13 @@ apps:
       - system-trace
       - libvirt
 #      - openvswitch
+  nova-api-metadata:
+    command: snap-openstack nova-api-metadata
+    daemon: simple
+    plugs:
+      - network
+      - network-bind
+      - firewall-control
   neutron-openvswitch-agent:
     command: snap-openstack neutron-openvswitch-agent
     daemon: simple
@@ -68,7 +75,6 @@ apps:
     plugs:
       - network
       - network-bind
-      - network-control
   neutron-ovs-cleanup:
     command: snap-openstack neutron-ovs-cleanup
     plugs:
@@ -81,6 +87,12 @@ apps:
       - network
       - network-control
 parts:
+  ipset:
+    source: http://ipset.netfilter.org/ipset-6.30.tar.bz2
+    plugin: autotools
+    build-packages:
+      - libltdl-dev
+      - libmnl-dev
   dnsmasq:
     source: http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.76.tar.xz
     plugin: make
