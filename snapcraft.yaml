@@ -13,8 +13,9 @@ description: |
     OpenStack Ironic.
   .
   This snap provides the hypervisor component of an OpenStack
-  deployment, configured to use Libvirt/KVM + Open vSwitch.
-confinement: strict
+  deployment, configured to use Libvirt/KVM + Open vSwitch
+  installed using debian packages on the hosting server.
+confinement: devmode
 grade: devel
 
 apps:
@@ -27,7 +28,7 @@ apps:
       - firewall-control
       - system-trace
       - libvirt
-      - openvswitch
+#      - openvswitch
   neutron-openvswitch-agent:
     command: snap-openstack neutron-openvswitch-agent
     daemon: simple
@@ -39,7 +40,7 @@ apps:
       - process-control
       - system-trace
       - system-observe
-      - openvswitch
+#      - openvswitch
   neutron-l3-agent:
     command: snap-openstack neutron-l3-agent
     daemon: simple
@@ -50,7 +51,7 @@ apps:
       - process-control
       - system-trace
       - system-observe
-      - openvswitch
+#      - openvswitch
   neutron-dhcp-agent:
     command: snap-openstack neutron-dhcp-agent
     daemon: simple
@@ -60,7 +61,7 @@ apps:
       - process-control
       - system-trace
       - system-observe
-      - openvswitch
+#      - openvswitch
   neutron-metadata-agent:
     command: snap-openstack neutron-metadata-agent
     daemon: simple
@@ -73,7 +74,7 @@ apps:
     plugs:
       - network
       - network-control
-      - openvswitch
+#      - openvswitch
   neutron-netns-cleanup:
     command: snap-openstack neutron-netns-cleanup
     plugs:
