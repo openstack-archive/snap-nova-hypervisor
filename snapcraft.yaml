@@ -93,6 +93,8 @@ parts:
     build-packages:
       - libltdl-dev
       - libmnl-dev
+    configflags:
+      - "--with-kmod=no"
   dnsmasq:
     source: http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.76.tar.xz
     plugin: make
