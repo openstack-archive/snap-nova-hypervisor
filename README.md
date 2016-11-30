@@ -7,7 +7,7 @@ This snap specifically provides the compute and networking hypervisor daemons
 as part of a snap based OpenStack deployment:
 
  - nova-compute
- - nova-api-metadata (provided for local metadata service use):w
+ - nova-api-metadata (provided for local metadata service use)
  - neutron-openvswitch-agent
  - neutron-dhcp-agent
  - neutron-l3-agent
