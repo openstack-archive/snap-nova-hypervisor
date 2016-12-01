@@ -27,6 +27,7 @@ apps:
       - network-control
       - firewall-control
       - system-trace
+      - hardware-observe
       - libvirt
 #      - openvswitch
   nova-api-metadata:
