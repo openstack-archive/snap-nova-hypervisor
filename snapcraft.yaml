@@ -15,78 +15,35 @@ description: |
   This snap provides the hypervisor component of an OpenStack
   deployment, configured to use Libvirt/KVM + Open vSwitch
   installed using debian packages on the hosting server.
-confinement: devmode
+confinement: classic
 grade: devel
+
+environment:
+  PATH: $PATH:$SNAP/bin/
 
 apps:
   nova-compute:
     command: snap-openstack nova-compute
     daemon: simple
-    plugs:
-      - network
-      - network-control
-      - firewall-control
-      - system-trace
-      - hardware-observe
-      - libvirt
-      - openvswitch
   nova-api-metadata:
     command: snap-openstack nova-api-metadata
     daemon: simple
-    plugs:
-      - network
-      - network-bind
-      - firewall-control
   neutron-openvswitch-agent:
     command: snap-openstack neutron-openvswitch-agent
     daemon: simple
-    plugs:
-      - network
-      - network-bind
-      - network-control
-      - firewall-control
-      - process-control
-      - system-trace
-      - system-observe
-      - openvswitch
   neutron-l3-agent:
     command: snap-openstack neutron-l3-agent
     daemon: simple
-    plugs:
-      - network
-      - network-control
-      - firewall-control
-      - process-control
-      - system-trace
-      - system-observe
-      - openvswitch
   neutron-dhcp-agent:
     command: snap-openstack neutron-dhcp-agent
     daemon: simple
-    plugs:
-      - network
-      - network-control
-      - process-control
-      - system-trace
-      - system-observe
-      - openvswitch
   neutron-metadata-agent:
     command: snap-openstack neutron-metadata-agent
     daemon: simple
-    plugs:
-      - network
-      - network-bind
   neutron-ovs-cleanup:
     command: snap-openstack neutron-ovs-cleanup
-    plugs:
-      - network
-      - network-control
-      - openvswitch
   neutron-netns-cleanup:
     command: snap-openstack neutron-netns-cleanup
-    plugs:
-      - network
-      - network-control
 parts:
   ipset:
     source: http://ipset.netfilter.org/ipset-6.30.tar.bz2
@@ -130,8 +87,7 @@ parts:
     stage: [$bin]
     snap: [$bin]
   nova:
-    after:
-      - openvswitch
+    after: [openvswitch]
     plugin: python
     python-version: python2
     source: http://tarballs.openstack.org/nova/nova-master.tar.gz
@@ -141,26 +97,21 @@ parts:
       - python-memcached
       - http://tarballs.openstack.org/neutron/neutron-master.tar.gz
       - http://tarballs.openstack.org/nova-lxd/nova-lxd-master.tar.gz
-      - git+https://github.com/openstack-snaps/snap.openstack#egg=snap.openstack
+      - git+https://github.com/openstack/snap.openstack#egg=snap.openstack
     constraints: https://raw.githubusercontent.com/openstack/requirements/master/upper-constraints.txt
     build-packages:
+      - gcc
       - libffi-dev
       - libssl-dev
-      - libxml2-dev
-      - libxslt1-dev
       - libvirt-dev
-      - pkg-config
-      - gcc
     stage-packages:
       - qemu-utils
   templates:
-    after:
-      - nova
+    after: [nova]
     plugin: dump
     source: snap
   config-nova:
-    after:
-      - nova
+    after: [nova]
     plugin: dump
     source: http://tarballs.openstack.org/nova/nova-master.tar.gz
     filesets:
@@ -169,8 +120,7 @@ parts:
     stage: [$etc]
     snap: [$etc]
   config-neutron:
-    after:
-      - nova
+    after: [nova]
     plugin: dump
     source: http://tarballs.openstack.org/neutron/neutron-master.tar.gz
     organize:
