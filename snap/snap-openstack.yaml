@@ -1,84 +1,75 @@
 setup:
   dirs:
-    - "{snap_common}/etc/nova.conf.d"
-    - "{snap_common}/etc/nova"
-    - "{snap_common}/etc/neutron.conf.d"
-    - "{snap_common}/etc/neutron"
+    - "{snap_common}/etc/nova/conf.d"
+    - "{snap_common}/etc/neutron/conf.d"
+    - "{snap_common}/etc/neutron/plugins/ml2"
+    - "{snap_common}/instances"
+    - "{snap_common}/lib"
     - "{snap_common}/log"
     - "{snap_common}/lock"
     - "{snap_common}/run"
-    - "{snap_common}/instances"
   templates:
-    "nova-snap.conf.j2": "{snap_common}/etc/nova.conf.d/nova-snap.conf"
-    "neutron-snap.conf.j2": "{snap_common}/etc/neutron.conf.d/neutron-snap.conf"
+    nova-snap.conf.j2: "{snap_common}/etc/nova/conf.d/nova-snap.conf"
+    neutron-snap.conf.j2: "{snap_common}/etc/neutron/conf.d/neutron-snap.conf"
+  copyfiles:
+    "{snap}/etc/nova": "{snap_common}/etc/nova"
+    "{snap}/etc/neutron": "{snap_common}/etc/neutron"
 entry_points:
   nova-compute:
     binary: nova-compute
     config-files:
-      - "{snap}/etc/nova/nova.conf"
       - "{snap_common}/etc/nova/nova.conf"
     config-dirs:
-      - "{snap_common}/etc/nova.conf.d"
+      - "{snap_common}/etc/nova/conf.d"
     log-file: "{snap_common}/log/nova-compute.log"
   nova-api-metadata:
     binary: nova-api-metadata
     config-files:
-      - "{snap}/etc/nova/nova.conf"
       - "{snap_common}/etc/nova/nova.conf"
     config-dirs:
-      - "{snap_common}/etc/nova.conf.d"
+      - "{snap_common}/etc/nova/conf.d"
     log-file: "{snap_common}/log/nova-api-metadata.log"
   neutron-openvswitch-agent:
     binary: neutron-openvswitch-agent
     config-files:
-      - "{snap}/etc/neutron/neutron.conf"
-      - "{snap}/etc/neutron/plugins/ml2/openvswitch_agent.ini"
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/plugins/ml2/openvswitch_agent.ini"
     config-dirs:
-      - "{snap_common}/etc/neutron.conf.d"
+      - "{snap_common}/etc/neutron/conf.d"
     log-file: "{snap_common}/log/neutron-openvswitch-agent.log"
   neutron-ovs-cleanup:
     binary: neutron-ovs-cleanup
     config-files:
-      - "{snap}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/neutron.conf"
     config-dirs:
-      - "{snap_common}/etc/neutron.conf.d"
+      - "{snap_common}/etc/neutron/conf.d"
   neutron-netns-cleanup:
     binary: neutron-netns-cleanup
     config-files:
-      - "{snap}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/neutron.conf"
     config-dirs:
-      - "{snap_common}/etc/neutron.conf.d"
+      - "{snap_common}/etc/neutron/conf.d"
   neutron-l3-agent:
     binary: neutron-l3-agent
     config-files:
-      - "{snap}/etc/neutron/neutron.conf"
-      - "{snap}/etc/neutron/l3_agent.ini"
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/l3_agent.ini"
     config-dirs:
-      - "{snap_common}/etc/neutron.conf.d"
+      - "{snap_common}/etc/neutron/conf.d"
     log-file: "{snap_common}/log/neutron-l3-agent.log"
   neutron-dhcp-agent:
     binary: neutron-dhcp-agent
     config-files:
-      - "{snap}/etc/neutron/neutron.conf"
-      - "{snap}/etc/neutron/dhcp_agent.ini"
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/dhcp_agent.ini"
     config-dirs:
-      - "{snap_common}/etc/neutron.conf.d"
+      - "{snap_common}/etc/neutron/conf.d"
     log-file: "{snap_common}/log/neutron-dhcp-agent.log"
   neutron-metadata-agent:
     binary: neutron-metadata-agent
     config-files:
-      - "{snap}/etc/neutron/neutron.conf"
-      - "{snap}/etc/neutron/metadata_agent.ini"
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/metadata_agent.ini"
     config-dirs:
-      - "{snap_common}/etc/neutron.conf.d"
+      - "{snap_common}/etc/neutron/conf.d"
     log-file: "{snap_common}/log/neutron-metadata-agent.log"
