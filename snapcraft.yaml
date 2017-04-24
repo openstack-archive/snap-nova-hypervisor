@@ -103,6 +103,9 @@ parts:
       - libvirt-dev
     stage-packages:
       - qemu-utils
+    install:
+      touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/paste/__init__.py
+      touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/repoze/__init__.py
   templates:
     after: [nova]
     plugin: dump
