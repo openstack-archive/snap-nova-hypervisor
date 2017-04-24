@@ -20,27 +20,43 @@ grade: devel
 
 apps:
   nova-compute:
-    command: snap-openstack nova-compute
+    command: >
+      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
+      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack nova-compute
     daemon: simple
   nova-api-metadata:
-    command: snap-openstack nova-api-metadata
+    command: >
+      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
+      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack nova-api-metadata
     daemon: simple
   neutron-openvswitch-agent:
-    command: snap-openstack neutron-openvswitch-agent
+    command: >
+      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
+      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-openvswitch-agent
     daemon: simple
   neutron-l3-agent:
-    command: snap-openstack neutron-l3-agent
+    command: >
+      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
+      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-l3-agent
     daemon: simple
   neutron-dhcp-agent:
-    command: snap-openstack neutron-dhcp-agent
+    command: >
+      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
+      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-dhcp-agent
     daemon: simple
   neutron-metadata-agent:
-    command: snap-openstack neutron-metadata-agent
+    command: >
+      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
+      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-metadata-agent
     daemon: simple
   neutron-ovs-cleanup:
-    command: snap-openstack neutron-ovs-cleanup
+    command: >
+      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
+      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-ovs-cleanup
   neutron-netns-cleanup:
-    command: snap-openstack neutron-netns-cleanup
+    command: >
+      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
+      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-netns-cleanup
 parts:
   ipset:
     source: http://ipset.netfilter.org/ipset-6.30.tar.bz2
@@ -84,7 +100,9 @@ parts:
     stage: [$bin]
     snap: [$bin]
   nova:
-    after: [openvswitch]
+    after:
+      - openvswitch
+      - python
     plugin: python
     python-version: python2
     source: http://tarballs.openstack.org/nova/nova-master.tar.gz
@@ -103,6 +121,11 @@ parts:
       - libvirt-dev
     stage-packages:
       - qemu-utils
+    stage:
+      - -usr/bin/2to3
+      - -usr/bin/pydoc
+      - -usr/bin/python2.7
+      - -usr/lib/python2.7
     install:
       touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/paste/__init__.py
       touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/repoze/__init__.py
@@ -133,3 +156,16 @@ parts:
         - etc/neutron/*
     stage: [$etc]
     snap: [$etc]
+  python:
+    source: https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tar.xz
+    plugin: autotools
+    configflags:
+      - --prefix=/usr
+      - --enable-shared
+      - --enable-unicode=ucs4
+    build-packages:
+      - libssl-dev
+    prime:
+      - -usr/include
+    install:
+      $SNAPCRAFT_PART_INSTALL/usr/bin/python2 -m ensurepip
