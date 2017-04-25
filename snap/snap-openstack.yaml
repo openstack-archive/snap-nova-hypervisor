@@ -16,21 +16,21 @@ setup:
     "{snap}/etc/neutron": "{snap_common}/etc/neutron"
 entry_points:
   nova-compute:
-    binary: nova-compute
+    binary: "{snap}/bin/nova-compute"
     config-files:
       - "{snap_common}/etc/nova/nova.conf"
     config-dirs:
       - "{snap_common}/etc/nova/conf.d"
     log-file: "{snap_common}/log/nova-compute.log"
   nova-api-metadata:
-    binary: nova-api-metadata
+    binary: "{snap}/bin/nova-api-metadata"
     config-files:
       - "{snap_common}/etc/nova/nova.conf"
     config-dirs:
       - "{snap_common}/etc/nova/conf.d"
     log-file: "{snap_common}/log/nova-api-metadata.log"
   neutron-openvswitch-agent:
-    binary: neutron-openvswitch-agent
+    binary: "{snap}/bin/neutron-openvswitch-agent"
     config-files:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/plugins/ml2/openvswitch_agent.ini"
@@ -38,19 +38,19 @@ entry_points:
       - "{snap_common}/etc/neutron/conf.d"
     log-file: "{snap_common}/log/neutron-openvswitch-agent.log"
   neutron-ovs-cleanup:
-    binary: neutron-ovs-cleanup
+    binary: "{snap}/bin/neutron-ovs-cleanup"
     config-files:
       - "{snap_common}/etc/neutron/neutron.conf"
     config-dirs:
       - "{snap_common}/etc/neutron/conf.d"
   neutron-netns-cleanup:
-    binary: neutron-netns-cleanup
+    binary: "{snap}/bin/neutron-netns-cleanup"
     config-files:
       - "{snap_common}/etc/neutron/neutron.conf"
     config-dirs:
       - "{snap_common}/etc/neutron/conf.d"
   neutron-l3-agent:
-    binary: neutron-l3-agent
+    binary: "{snap}/bin/neutron-l3-agent"
     config-files:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/l3_agent.ini"
@@ -58,7 +58,7 @@ entry_points:
       - "{snap_common}/etc/neutron/conf.d"
     log-file: "{snap_common}/log/neutron-l3-agent.log"
   neutron-dhcp-agent:
-    binary: neutron-dhcp-agent
+    binary: "{snap}/bin/neutron-dhcp-agent"
     config-files:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/dhcp_agent.ini"
@@ -66,7 +66,7 @@ entry_points:
       - "{snap_common}/etc/neutron/conf.d"
     log-file: "{snap_common}/log/neutron-dhcp-agent.log"
   neutron-metadata-agent:
-    binary: neutron-metadata-agent
+    binary: "{snap}/bin/neutron-metadata-agent"
     config-files:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/metadata_agent.ini"
