@@ -70,9 +70,9 @@ parts:
     source: http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.76.tar.xz
     plugin: make
     build-packages:
-      - libnetfilter-conntrack-dev
-      - libidn11-dev
       - libgmp-dev
+      - libidn11-dev
+      - libnetfilter-conntrack-dev
       - nettle-dev
     organize:
       usr/local/sbin/dnsmasq: bin/dnsmasq
@@ -85,11 +85,11 @@ parts:
     source: http://openvswitch.org/releases/openvswitch-2.6.1.tar.gz
     plugin: autotools
     build-packages:
-      - libssl-dev
       - libnuma-dev
+      - libssl-dev
       - python-all
-      - python-six
       - python-setuptools
+      - python-six
     stage-packages:
       - uuid-runtime
     filesets:
@@ -101,14 +101,14 @@ parts:
     snap: [$bin]
   nova:
     after:
-      - openvswitch
       - python
+      - openvswitch
     plugin: python
     python-version: python2
     source: http://tarballs.openstack.org/nova/nova-master.tar.gz
     python-packages:
-      - pymysql
       - libvirt-python
+      - pymysql
       - python-memcached
       - http://tarballs.openstack.org/neutron/neutron-master.tar.gz
       - http://tarballs.openstack.org/nova-lxd/nova-lxd-master.tar.gz
@@ -119,6 +119,8 @@ parts:
       - libffi-dev
       - libssl-dev
       - libvirt-dev
+      - libxml2-dev
+      - libxslt1-dev
     stage-packages:
       - qemu-utils
     stage:
