@@ -105,15 +105,15 @@ parts:
       - openvswitch
     plugin: python
     python-version: python2
-    source: http://tarballs.openstack.org/nova/nova-master.tar.gz
+    source: http://tarballs.openstack.org/nova/nova-stable-ocata.tar.gz
     python-packages:
       - libvirt-python
       - pymysql
       - python-memcached
-      - http://tarballs.openstack.org/neutron/neutron-master.tar.gz
-      - http://tarballs.openstack.org/nova-lxd/nova-lxd-master.tar.gz
+      - http://tarballs.openstack.org/neutron/neutron-stable-ocata.tar.gz
+      - http://tarballs.openstack.org/nova-lxd/nova-lxd-stable-ocata.tar.gz
       - git+https://github.com/openstack/snap.openstack#egg=snap.openstack
-    constraints: https://raw.githubusercontent.com/openstack/requirements/master/upper-constraints.txt
+    constraints: https://raw.githubusercontent.com/openstack/requirements/stable/ocata/upper-constraints.txt
     build-packages:
       - gcc
       - libffi-dev
@@ -138,7 +138,7 @@ parts:
   config-nova:
     after: [nova]
     plugin: dump
-    source: http://tarballs.openstack.org/nova/nova-master.tar.gz
+    source: http://tarballs.openstack.org/nova/nova-stable-ocata.tar.gz
     filesets:
       etc:
         - etc/nova/*
@@ -147,7 +147,7 @@ parts:
   config-neutron:
     after: [nova]
     plugin: dump
-    source: http://tarballs.openstack.org/neutron/neutron-master.tar.gz
+    source: http://tarballs.openstack.org/neutron/neutron-stable-ocata.tar.gz
     organize:
       etc/*.conf: etc/neutron/
       etc/*.ini: etc/neutron/
