@@ -111,7 +111,7 @@ parts:
       - pymysql
       - python-memcached
       - http://tarballs.openstack.org/neutron/neutron-stable-ocata.tar.gz
-      - http://tarballs.openstack.org/nova-lxd/nova-lxd-stable-ocata.tar.gz
+      - http://tarballs.openstack.org/nova/nova-stable-ocata.tar.gz
       - git+https://github.com/openstack/snap.openstack#egg=snap.openstack
     constraints: https://raw.githubusercontent.com/openstack/requirements/stable/ocata/upper-constraints.txt
     build-packages:
