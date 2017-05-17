@@ -80,7 +80,7 @@ parts:
       bin:
         - bin/dnsmasq
     stage: [$bin]
-    snap: [$bin]
+    prime: [$bin]
   openvswitch:
     source: http://openvswitch.org/releases/openvswitch-2.6.1.tar.gz
     plugin: autotools
