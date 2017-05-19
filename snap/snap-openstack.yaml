@@ -18,12 +18,17 @@ setup:
   templates:
     nova-snap.conf.j2: "{snap_common}/etc/nova/conf.d/nova-snap.conf"
     neutron-snap.conf.j2: "{snap_common}/etc/neutron/conf.d/neutron-snap.conf"
+    snap-nova-hypervisor_sudoers.j2: "/etc/sudoers.d/snap-nova-hypervisor_sudoers"
+    neutron-rootwrap.conf.j2: "{snap_common}/etc/neutron/rootwrap.conf"
+    nova-rootwrap.conf.j2: "{snap_common}/etc/nova/rootwrap.conf"
   rchown:
     "{snap_common}/instances": "snap-nova-hypervisor:snap-nova-hypervisor"
     "{snap_common}/lib": "snap-nova-hypervisor:snap-nova-hypervisor"
     "{snap_common}/lock": "snap-nova-hypervisor:snap-nova-hypervisor"
     "{snap_common}/log": "snap-nova-hypervisor:snap-nova-hypervisor"
     "{snap_common}/run": "snap-nova-hypervisor:snap-nova-hypervisor"
+  chmod:
+    "/etc/sudoers.d/snap-nova-hypervisor_sudoers": 0440
 entry_points:
   nova-compute:
     binary: "{snap}/bin/nova-compute"
