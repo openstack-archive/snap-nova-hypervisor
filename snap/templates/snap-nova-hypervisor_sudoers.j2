@@ -1,0 +1,5 @@
+Defaults:snap-nova-hypervisor !requiretty
+
+snap-nova-hypervisor ALL = (root) NOPASSWD: {{ snap }}/bin/nova-rootwrap {{ snap }}/etc/nova/rootwrap.conf *
+snap-nova-hypervisor ALL = (root) NOPASSWD: {{ snap }}/bin/neutron-rootwrap {{ snap }}/etc/neutron/rootwrap.conf *
+

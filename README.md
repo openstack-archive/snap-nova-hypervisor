@@ -24,10 +24,11 @@ The nova-hypervisor snap can be installed directly from the snap store:
 
 The nova-hypervisor snap is working towards publication across tracks for
 OpenStack releases. The edge channel for each track will contain the tip
-of the OpenStack project's master branch, with the beta, candidate and
-release channels being reserved for released versions. These three channels
-will be used to drive the CI process for validation of snap updates. This
-should result in an experience such as:
+of the OpenStack project's master or stable branch, with the beta, candidate,
+and stable channels being reserved for released versions. The same version
+will be published progressively to beta, then candidate, and then stable once
+CI validation completes for the channel. This should result in an experience
+such as:
 
     sudo snap install --classic --channel=ocata/stable nova-hypervisor
     sudo snap install --classic --channel=pike/edge nova-hypervisor
