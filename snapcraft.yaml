@@ -53,10 +53,14 @@ apps:
     command: >
       env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
       $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-ovs-cleanup
+    aliases:
+      - neutron-ovs-cleanup
   neutron-netns-cleanup:
     command: >
       env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
       $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-netns-cleanup
+    aliases:
+      - neutron-netns-cleanup
 parts:
   ipset:
     source: http://ipset.netfilter.org/ipset-6.30.tar.bz2
