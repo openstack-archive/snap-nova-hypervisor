@@ -20,84 +20,122 @@ Neutron plugin.
 
 The nova-hypervisor snap can be installed directly from the snap store:
 
-    sudo snap install [--edge] --devmode nova-hypervisor
+    sudo snap install --edge --classic nova-hypervisor
 
-Currently, this snap makes use of libvirt and openvswitch daemons running
-on the host operating system, so these packages must be installed for
-a functional hypervisor install:
+The nova-hypervisor snap is working towards publication across tracks for
+OpenStack releases. The edge channel for each track will contain the tip
+of the OpenStack project's master branch, with the beta, candidate and
+release channels being reserved for released versions. These three channels
+will be used to drive the CI process for validation of snap updates. This
+should result in an experience such as:
+
+    sudo snap install --classic --channel=ocata/stable nova-hypervisor
+    sudo snap install --classic --channel=pike/edge nova-hypervisor
+
+This snap makes use of libvirt and openvswitch daemons running on the host
+operating system, so these packages must be installed for a functional
+hypervisor:
 
     sudo apt install libvirt-bin qemu-kvm openvswitch-switch
 
-In addition, the libvirt apparmor helper must be placed into complain mode
-until [bug 1644507](https://bugs.launchpad.net/ubuntu/+source/libvirt/+bug/1644507)
-is resolved:
-
-    sudo aa-complain /usr/lib/libvirt/virt-aa-helper
-
 ## Configuring Nova and Neutron
 
-Snaps run in an AppArmor and seccomp confined profile, so don't read
-configuration from `/etc/{nova,neutron}` on the hosting operating system install.
+The nova-hypervisor snap gets its default configuration from the following $SNAP
+and $SNAP_COMMON locations:
 
-This snap supports configuration via the $SNAP\_COMMON writable area for the
-snap:
-
-    etc/
-    ├── neutron
-    │   ├── metadata_agent.ini
-    │   └── plugins
-    │       └── ml2
-    │           └── openvswitch_agent.ini
-    ├── neutron.conf.d
-    │   └── neutron-snap.conf
+    /snap/nova-hypervisor/current/etc/
     ├── nova
-    └── nova.conf.d
-        ├── glance.conf
-        ├── keystone.conf
-        ├── neutron.conf
-        └── nova-snap.conf
+    │   └── nova.conf
+    └── neutron
+        ├── neutron.conf
+        ├── dhcp_agent.ini
+        ├── l3_agent.ini
+        ├── metadata_agent.ini
+        └── plugins
+            └── ml2
+                └── openvswitch_agent.ini
 
-The nova-hypervisor snap can be configured in a few ways.
+    /var/snap/nova-hypervisor/common/etc/
+    ├── nova
+    │   └── conf.d
+    │       └── nova-snap.conf
+    └── neutron
+        └── conf.d
+            └── neutron-snap.conf
 
-Firstly the nova daemons will detect and read `etc/nova/nova.conf`
-if it exists so you can reuse your existing tooling to write to this file
-for classic style configuration.
+The nova-hypervisor snap supports configuration updates via its $SNAP_COMMON
+writable area. The default nova-hypervisor configuration can be overridden as
+follows:
 
-Alternatively the nova daemons will load all configuration files from
-`etc/nova.conf.d` - in the above example, glance and neutron configuration
-are configured  using configuration snippets in separate files in
-`etc/nova.conf.d`.
+    /var/snap/nova-hypervisor/common/etc/
+    ├── nova
+    │   ├── conf.d
+    │   │   ├── nova-snap.conf
+    │   │   ├── glance.conf
+    │   │   ├── keystone.conf
+    │   │   └── neutron.conf
+    │   └── nova.conf
+    └── neutron
+        ├── conf.d
+        │   ├── neutron-snap.conf
+        │   └── ...
+        ├── neutron.conf
+        ├── dhcp_agent.ini
+        ├── l3_agent.ini
+        ├── metadata_agent.ini
+        └── plugins
+            └── ml2
+                └── openvswitch_agent.ini
 
-Neutron daemons follow the same behaviour; each daemon has its own dedicated
-configuration file, but will also consume `etc/neutron.conf` and snippets
-from `etc/neutron.conf.d` as well if these are found.
+The nova and neutron configuration can be overridden or augmented by writing
+configuration snippets to files in their conf.d directories.
 
-For reference, $SNAP\_COMMON is typically located under
-`/var/snap/nova-hypervisor/common`.
+Alternatively, configuration can be overridden by adding full config files
+to the nova/, neutron/, neutron/plugins/ml2/ directories. If overriding in
+this way, you'll need to either point config files at additional config files
+located in $SNAP, or add those to $SNAP_COMMON as well.
+
+## Logging nova-hypervisor
+
+The services for the nova-hypervisor snap will log to its $SNAP_COMMON writable area:
+/var/snap/nova-hypervisor/common/log.
+
+## Managing nova-hypervisor
+
+The nova-hypervisor snap will drop privileges to run daemons and commands
+under a regular user named snap-nova-hypervisor. Additionally, permissions
+and ownership of files and directories in /var/snap/nova-hypervisor/common/
+are modified to restrict access from other users.
+
+The nova-hypervisor snap has alias support that enables use of the well-known
+neutron-netns-cleanup and neutron-ovs-cleanup commands. To enable the aliases,
+run the following prior to using the commands:
+
+    sudo snap alias nova-hypervisor.neutron-netns-cleanup neutron-netns-cleanup
+    sudo snap alias nova-hypervisor.neutron-ovs-cleanup neutron-ovs-cleanup
 
 ## Restarting services
 
-To restart all services:
+To restart all nova-hypervisor services:
 
     sudo systemctl restart snap.nova-hypervisor.*
 
-or restart services individually:
+or an individual service can be restarted by dropping the wildcard and
+specifying the full service name.
 
-    sudo systemctl restart snap.nova-hypervisor.nova-compute
-
-## Building this snap
+## Building the nova-hypervisor snap
 
 Simply clone this repository and then install and run snapcraft:
 
-    git clone https://github.com/openstack-snaps/snap-nova-hypervisor
+    git clone https://github.com/openstack/snap-nova-hypervisor
     sudo apt install snapcraft
-    cd nova
+    cd snap-nova-hypervisor
     snapcraft
 
 ## Support
 
-Please report any bugs related to this snap on
+Please report any bugs related to this snap at:
 [Launchpad](https://bugs.launchpad.net/snap-nova-hypervisor/+filebug).
 
-Alternatively you can find the OpenStack Snap team in `#openstack-snaps`
-on Freenode IRC.
+Alternatively you can find the OpenStack Snap team in `#openstack-snaps` on
+Freenode IRC.
