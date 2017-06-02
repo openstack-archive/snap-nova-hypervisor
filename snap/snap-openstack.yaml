@@ -29,6 +29,7 @@ entry_points:
     binary: "{snap}/bin/nova-compute"
     config-files:
       - "{snap}/etc/nova/nova.conf"
+    config-files-override:
       - "{snap_common}/etc/nova/nova.conf"
     config-dirs:
       - "{snap_common}/etc/nova/conf.d"
@@ -39,6 +40,7 @@ entry_points:
     binary: "{snap}/bin/nova-api-metadata"
     config-files:
       - "{snap}/etc/nova/nova.conf"
+    config-files-override:
       - "{snap_common}/etc/nova/nova.conf"
     config-dirs:
       - "{snap_common}/etc/nova/conf.d"
@@ -50,6 +52,7 @@ entry_points:
     config-files:
       - "{snap}/etc/neutron/neutron.conf"
       - "{snap}/etc/neutron/plugins/ml2/openvswitch_agent.ini"
+    config-files-override:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/plugins/ml2/openvswitch_agent.ini"
     config-dirs:
@@ -61,6 +64,7 @@ entry_points:
     binary: "{snap}/bin/neutron-ovs-cleanup"
     config-files:
       - "{snap}/etc/neutron/neutron.conf"
+    config-files-override:
       - "{snap_common}/etc/neutron/neutron.conf"
     config-dirs:
       - "{snap_common}/etc/neutron/conf.d"
@@ -70,6 +74,7 @@ entry_points:
     binary: "{snap}/bin/neutron-netns-cleanup"
     config-files:
       - "{snap}/etc/neutron/neutron.conf"
+    config-files-override:
       - "{snap_common}/etc/neutron/neutron.conf"
     config-dirs:
       - "{snap_common}/etc/neutron/conf.d"
@@ -80,6 +85,7 @@ entry_points:
     config-files:
       - "{snap}/etc/neutron/neutron.conf"
       - "{snap}/etc/neutron/l3_agent.ini"
+    config-files-override:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/l3_agent.ini"
     config-dirs:
@@ -92,6 +98,7 @@ entry_points:
     config-files:
       - "{snap}/etc/neutron/neutron.conf"
       - "{snap}/etc/neutron/dhcp_agent.ini"
+    config-files-override:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/dhcp_agent.ini"
     config-dirs:
@@ -104,6 +111,7 @@ entry_points:
     config-files:
       - "{snap}/etc/neutron/neutron.conf"
       - "{snap}/etc/neutron/metadata_agent.ini"
+    config-files-override:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/metadata_agent.ini"
     config-dirs:
