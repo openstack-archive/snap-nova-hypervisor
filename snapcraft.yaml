@@ -105,6 +105,7 @@ parts:
     snap: [$bin]
   nova:
     after:
+      - patches
       - python
       - openvswitch
     plugin: python
@@ -132,13 +133,20 @@ parts:
       - -usr/bin/pydoc
       - -usr/bin/python2.7
       - -usr/lib/python2.7
-    install:
+    install: |
       touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/paste/__init__.py
       touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/repoze/__init__.py
+      cd $SNAPCRAFT_PART_INSTALL
+      export PATCH_DIR="../../patches/src"
+      patch -p4 < $PATCH_DIR/oslo-config-dirs.patch
+      cd -
   templates:
     after: [nova]
     plugin: dump
     source: snap
+  patches:
+    plugin: dump
+    source: patches
   config-nova:
     after: [nova]
     plugin: dump
