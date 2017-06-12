@@ -15,53 +15,106 @@ description: |
   This snap provides the hypervisor component of an OpenStack
   deployment, configured to use Libvirt/KVM + Open vSwitch
   installed using debian packages on the hosting server.
-confinement: classic
+confinement: strict
 grade: devel
 
 apps:
   nova-compute:
-    command: >
-      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
-      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack nova-compute
+    command: snap-openstack nova-compute
     daemon: simple
+    plugs:
+      - network
+      - network-bind
+      - firewall-control
+      - system-trace
+      - hardware-observe
+      - libvirt
+      - openvswitch
   nova-api-metadata:
-    command: >
-      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
-      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack nova-api-metadata
+    command: snap-openstack nova-api-metadata
     daemon: simple
+    plugs:
+      - network
+      - network-bind
+      - firewall-control
   neutron-openvswitch-agent:
-    command: >
-      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
-      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-openvswitch-agent
+    command: snap-openstack neutron-openvswitch-agent
     daemon: simple
+    plugs:
+      - network
+      - network-bind
+      - network-control
+      - network-observe
+      - firewall-control
+      - process-control
+      - system-trace
+      - system-observe
+      - openvswitch
   neutron-l3-agent:
-    command: >
-      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
-      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-l3-agent
+    command: snap-openstack neutron-l3-agent
     daemon: simple
+    plugs:
+      - network
+      - network-bind
+      - network-control
+      - network-observe
+      - firewall-control
+      - process-control
+      - system-trace
+      - system-observe
+      - openvswitch
   neutron-dhcp-agent:
-    command: >
-      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
-      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-dhcp-agent
+    command: snap-openstack neutron-dhcp-agent
     daemon: simple
+    plugs:
+      - network
+      - network-bind
+      - network-control
+      - network-observe
+      - process-control
+      - system-trace
+      - system-observe
+      - openvswitch
   neutron-metadata-agent:
-    command: >
-      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
-      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-metadata-agent
+    command: snap-openstack neutron-metadata-agent
     daemon: simple
+    plugs:
+      - network
+      - network-bind
+      - network-control
   neutron-ovs-cleanup:
-    command: >
-      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
-      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-ovs-cleanup
+    command: snap-openstack neutron-ovs-cleanup
     aliases:
       - neutron-ovs-cleanup
+    plugs:
+      - network
+      - network-control
+      - openvswitch
   neutron-netns-cleanup:
-    command: >
-      env PYTHONPATH=$PYTHONPATH:$SNAP/lib/python2.7/site-packages
-      $SNAP/usr/bin/python2 $SNAP/bin/snap-openstack neutron-netns-cleanup
+    command: snap-openstack neutron-netns-cleanup
     aliases:
       - neutron-netns-cleanup
+    plugs:
+      - network
+      - network-control
 parts:
+  bridge-utils:
+    source: https://www.kernel.org/pub/linux/utils/net/bridge-utils/bridge-utils-1.6.tar.gz
+    plugin: autotools
+  iproute2:
+    source: https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-4.9.0.tar.gz
+    plugin: autotools
+    build-packages:
+      - bison
+      - flex
+      - libdb5.3-dev
+  iptables:
+    source: http://iptables.netfilter.org/projects/iptables/files/iptables-1.6.0.tar.bz2
+    plugin: autotools
+    build-packages:
+      - libnftnl-dev
+    configflags:
+      - --disable-nftables
   ipset:
     source: http://ipset.netfilter.org/ipset-6.30.tar.bz2
     plugin: autotools
@@ -70,6 +123,9 @@ parts:
       - libmnl-dev
     configflags:
       - "--with-kmod=no"
+  libxml2:
+    source: http://xmlsoft.org/sources/libxml2-2.9.4.tar.gz
+    plugin: autotools
   dnsmasq:
     source: http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.76.tar.xz
     plugin: make
@@ -105,7 +161,6 @@ parts:
     snap: [$bin]
   nova:
     after:
-      - python
       - openvswitch
     plugin: python
     python-version: python2
@@ -127,11 +182,6 @@ parts:
       - libxslt1-dev
     stage-packages:
       - qemu-utils
-    stage:
-      - -usr/bin/2to3
-      - -usr/bin/pydoc
-      - -usr/bin/python2.7
-      - -usr/lib/python2.7
     install: |
       touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/paste/__init__.py
       touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/repoze/__init__.py
@@ -165,16 +215,3 @@ parts:
         - etc/neutron/*
     stage: [$etc]
     snap: [$etc]
-  python:
-    source: https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tar.xz
-    plugin: autotools
-    configflags:
-      - --prefix=/usr
-      - --enable-shared
-      - --enable-unicode=ucs4
-    build-packages:
-      - libssl-dev
-    prime:
-      - -usr/include
-    install:
-      $SNAPCRAFT_PART_INSTALL/usr/bin/python2 -m ensurepip

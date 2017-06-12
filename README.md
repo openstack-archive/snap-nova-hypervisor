@@ -20,7 +20,7 @@ Neutron plugin.
 
 The nova-hypervisor snap can be installed directly from the snap store:
 
-    sudo snap install --edge --classic nova-hypervisor
+    sudo snap install --edge nova-hypervisor
 
 The nova-hypervisor snap is working towards publication across tracks for
 OpenStack releases. The edge channel for each track will contain the tip
@@ -30,14 +30,20 @@ will be published progressively to beta, then candidate, and then stable once
 CI validation completes for the channel. This should result in an experience
 such as:
 
-    sudo snap install --classic --channel=ocata/stable nova-hypervisor
-    sudo snap install --classic --channel=pike/edge nova-hypervisor
+    sudo snap install --channel=ocata/stable nova-hypervisor
+    sudo snap install --channel=pike/edge nova-hypervisor
 
 This snap makes use of libvirt and openvswitch daemons running on the host
 operating system, so these packages must be installed for a functional
 hypervisor:
 
     sudo apt install libvirt-bin qemu-kvm openvswitch-switch
+
+In addition, the libvirt apparmor helper must be placed into complain mode
+until [bug 1644507](https://bugs.launchpad.net/ubuntu/+source/libvirt/+bug/1644507)
+is resolved:
+
+    sudo aa-complain /usr/lib/libvirt/virt-aa-helper
 
 ## Configuring Nova and Neutron
 
@@ -103,10 +109,19 @@ The services for the nova-hypervisor snap will log to its $SNAP_COMMON writable 
 
 ## Managing nova-hypervisor
 
-The nova-hypervisor snap will drop privileges to run daemons and commands
-under a regular user named snap-nova-hypervisor. Additionally, permissions
-and ownership of files and directories in /var/snap/nova-hypervisor/common/
-are modified to restrict access from other users.
+The nova-hypervisor snap uses privileged interfaces that are not auto-connected
+at install time. In order to grant access to these privileged interfaces, the
+following plugs and slots must be connected:
+
+    sudo snap connect nova-hypervisor:system-trace core:system-trace
+    sudo snap connect nova-hypervisor:hardware-observe core:hardware-observe
+    sudo snap connect nova-hypervisor:system-observe core:system-observe
+    sudo snap connect nova-hypervisor:process-control core:process-control
+    sudo snap connect nova-hypervisor:openvswitch core:openvswitch
+    sudo snap connect nova-hypervisor:libvirt core:libvirt
+    sudo snap connect nova-hypervisor:network-observe core:network-observe
+    sudo snap connect nova-hypervisor:network-control core:network-control
+    sudo snap connect nova-hypervisor:firewall-control core:firewall-control
 
 The nova-hypervisor snap has alias support that enables use of the well-known
 neutron-netns-cleanup and neutron-ovs-cleanup commands. To enable the aliases,
