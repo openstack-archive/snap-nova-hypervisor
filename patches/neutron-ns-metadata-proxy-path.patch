@@ -1,0 +1,34 @@
+Description: Add the full binary patch to neutron-ns-metadata-proxy and update
+             the PYTHONPATH because the snap's env is not applied when the
+             proxy is executed.
+Author: Corey Bryant <corey.bryant@ubuntu.com>
+Forwarded: no
+--- a/parts/nova/install/lib/python2.7/site-packages/neutron/agent/metadata/driver.py
++++ b/parts/nova/install/lib/python2.7/site-packages/neutron/agent/metadata/driver.py
+@@ -100,14 +100,18 @@
+             metadata_proxy_socket = conf.metadata_proxy_socket
+             user, group, watch_log = (
+                 cls._get_metadata_proxy_user_group_watchlog(conf))
+-            proxy_cmd = ['neutron-ns-metadata-proxy',
+-                         '--pid_file=%s' % pid_file,
+-                         '--metadata_proxy_socket=%s' % metadata_proxy_socket,
+-                         lookup_param,
+-                         '--state_path=%s' % conf.state_path,
+-                         '--metadata_port=%s' % port,
+-                         '--metadata_proxy_user=%s' % user,
+-                         '--metadata_proxy_group=%s' % group]
++            proxy_cmd = [
++                'env',
++                'PYTHONPATH=$PYTHONPATH:'
++                '/snap/nova-hypervisor/current/lib/python2.7/site-packages',
++                '/snap/nova-hypervisor/current/bin/neutron-ns-metadata-proxy',
++                '--pid_file=%s' % pid_file,
++                '--metadata_proxy_socket=%s' % metadata_proxy_socket,
++                lookup_param,
++                '--state_path=%s' % conf.state_path,
++                '--metadata_port=%s' % port,
++                '--metadata_proxy_user=%s' % user,
++                '--metadata_proxy_group=%s' % group]
+             proxy_cmd.extend(config.get_log_args(
+                 conf, 'neutron-ns-metadata-proxy-%s.log' % uuid,
+                 metadata_proxy_watch_log=watch_log))
