@@ -58,10 +58,10 @@ and $SNAP_COMMON locations:
 
     /var/snap/nova-hypervisor/common/etc/
     ├── nova
-    │   └── conf.d
+    │   └── nova.conf.d
     │       └── nova-snap.conf
     └── neutron
-        └── conf.d
+        └── neutron.conf.d
             └── neutron-snap.conf
 
 The nova-hypervisor snap supports configuration updates via its $SNAP_COMMON
@@ -70,14 +70,14 @@ follows:
 
     /var/snap/nova-hypervisor/common/etc/
     ├── nova
-    │   ├── conf.d
+    │   ├── nova.conf.d
     │   │   ├── nova-snap.conf
     │   │   ├── glance.conf
     │   │   ├── keystone.conf
     │   │   └── neutron.conf
     │   └── nova.conf
     └── neutron
-        ├── conf.d
+        ├── neutron.conf.d
         │   ├── neutron-snap.conf
         │   └── ...
         ├── neutron.conf
