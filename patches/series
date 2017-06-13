@@ -1,1 +1,2 @@
 neutron-ns-metadata-proxy-path.patch
+oslo-config-dirs.patch
