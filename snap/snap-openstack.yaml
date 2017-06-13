@@ -1,6 +1,7 @@
 setup:
   users:
-    snap-nova-hypervisor: [snap-nova-hypervisor]
+    snap-nova-hypervisor: [snap-nova-hypervisor, libvirtd]
+    dnsmasq: [snap-nova-hypervisor]
   default-owner: "root:snap-nova-hypervisor"
   dirs:
     - "{snap_common}/etc"
@@ -35,7 +36,7 @@ entry_points:
       - "{snap_common}/etc/nova/nova.conf.d"
     log-file: "{snap_common}/log/nova-compute.log"
     run-as:
-      snap-nova-hypervisor: [snap-nova-hypervisor]
+      snap-nova-hypervisor: [snap-nova-hypervisor, libvirtd]
   nova-api-metadata:
     binary: "{snap}/bin/nova-api-metadata"
     config-files:
