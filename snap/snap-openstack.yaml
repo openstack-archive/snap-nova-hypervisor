@@ -5,9 +5,9 @@ setup:
   dirs:
     - "{snap_common}/etc"
     - "{snap_common}/etc/nova"
-    - "{snap_common}/etc/nova/conf.d"
+    - "{snap_common}/etc/nova/nova.conf.d"
     - "{snap_common}/etc/neutron"
-    - "{snap_common}/etc/neutron/conf.d"
+    - "{snap_common}/etc/neutron/neutron.conf.d"
     - "{snap_common}/etc/neutron/plugins"
     - "{snap_common}/etc/neutron/plugins/ml2"
     - "{snap_common}/instances"
@@ -16,8 +16,8 @@ setup:
     - "{snap_common}/log"
     - "{snap_common}/run"
   templates:
-    nova-snap.conf.j2: "{snap_common}/etc/nova/conf.d/nova-snap.conf"
-    neutron-snap.conf.j2: "{snap_common}/etc/neutron/conf.d/neutron-snap.conf"
+    nova-snap.conf.j2: "{snap_common}/etc/nova/nova.conf.d/nova-snap.conf"
+    neutron-snap.conf.j2: "{snap_common}/etc/neutron/neutron.conf.d/neutron-snap.conf"
   rchown:
     "{snap_common}/instances": "snap-nova-hypervisor:snap-nova-hypervisor"
     "{snap_common}/lib": "snap-nova-hypervisor:snap-nova-hypervisor"
@@ -32,7 +32,7 @@ entry_points:
     config-files-override:
       - "{snap_common}/etc/nova/nova.conf"
     config-dirs:
-      - "{snap_common}/etc/nova/conf.d"
+      - "{snap_common}/etc/nova/nova.conf.d"
     log-file: "{snap_common}/log/nova-compute.log"
     run-as:
       snap-nova-hypervisor: [snap-nova-hypervisor]
@@ -43,7 +43,7 @@ entry_points:
     config-files-override:
       - "{snap_common}/etc/nova/nova.conf"
     config-dirs:
-      - "{snap_common}/etc/nova/conf.d"
+      - "{snap_common}/etc/nova/nova.conf.d"
     log-file: "{snap_common}/log/nova-api-metadata.log"
     run-as:
       snap-nova-hypervisor: [snap-nova-hypervisor]
@@ -56,7 +56,7 @@ entry_points:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/plugins/ml2/openvswitch_agent.ini"
     config-dirs:
-      - "{snap_common}/etc/neutron/conf.d"
+      - "{snap_common}/etc/neutron/neutron.conf.d"
     log-file: "{snap_common}/log/neutron-openvswitch-agent.log"
     run-as:
       snap-nova-hypervisor: [snap-nova-hypervisor]
@@ -67,7 +67,7 @@ entry_points:
     config-files-override:
       - "{snap_common}/etc/neutron/neutron.conf"
     config-dirs:
-      - "{snap_common}/etc/neutron/conf.d"
+      - "{snap_common}/etc/neutron/neutron.conf.d"
     run-as:
       snap-nova-hypervisor: [snap-nova-hypervisor]
   neutron-netns-cleanup:
@@ -77,7 +77,7 @@ entry_points:
     config-files-override:
       - "{snap_common}/etc/neutron/neutron.conf"
     config-dirs:
-      - "{snap_common}/etc/neutron/conf.d"
+      - "{snap_common}/etc/neutron/neutron.conf.d"
     run-as:
       snap-nova-hypervisor: [snap-nova-hypervisor]
   neutron-l3-agent:
@@ -89,7 +89,7 @@ entry_points:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/l3_agent.ini"
     config-dirs:
-      - "{snap_common}/etc/neutron/conf.d"
+      - "{snap_common}/etc/neutron/neutron.conf.d"
     log-file: "{snap_common}/log/neutron-l3-agent.log"
     run-as:
       snap-nova-hypervisor: [snap-nova-hypervisor]
@@ -102,7 +102,7 @@ entry_points:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/dhcp_agent.ini"
     config-dirs:
-      - "{snap_common}/etc/neutron/conf.d"
+      - "{snap_common}/etc/neutron/neutron.conf.d"
     log-file: "{snap_common}/log/neutron-dhcp-agent.log"
     run-as:
       snap-nova-hypervisor: [snap-nova-hypervisor]
@@ -115,7 +115,7 @@ entry_points:
       - "{snap_common}/etc/neutron/neutron.conf"
       - "{snap_common}/etc/neutron/metadata_agent.ini"
     config-dirs:
-      - "{snap_common}/etc/neutron/conf.d"
+      - "{snap_common}/etc/neutron/neutron.conf.d"
     log-file: "{snap_common}/log/neutron-metadata-agent.log"
     run-as:
       snap-nova-hypervisor: [snap-nova-hypervisor]
