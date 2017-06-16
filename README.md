@@ -39,6 +39,12 @@ hypervisor:
 
     sudo apt install libvirt-bin qemu-kvm openvswitch-switch
 
+In addition, the libvirt apparmor helper must be placed into complain mode
+until [bug 1644507](https://bugs.launchpad.net/ubuntu/+source/libvirt/+bug/1644507)
+is resolved:
+
+    sudo aa-complain /usr/lib/libvirt/virt-aa-helper
+
 ## Configuring Nova and Neutron
 
 The nova-hypervisor snap gets its default configuration from the following $SNAP
