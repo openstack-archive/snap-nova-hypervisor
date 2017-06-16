@@ -1,12 +1,6 @@
 setup:
-  users:
-    snap-nova-hypervisor: [snap-nova-hypervisor]
-  default-owner: "root:snap-nova-hypervisor"
   dirs:
-    - "{snap_common}/etc"
-    - "{snap_common}/etc/nova"
     - "{snap_common}/etc/nova/nova.conf.d"
-    - "{snap_common}/etc/neutron"
     - "{snap_common}/etc/neutron/neutron.conf.d"
     - "{snap_common}/etc/neutron/plugins"
     - "{snap_common}/etc/neutron/plugins/ml2"
@@ -18,12 +12,8 @@ setup:
   templates:
     nova-snap.conf.j2: "{snap_common}/etc/nova/nova.conf.d/nova-snap.conf"
     neutron-snap.conf.j2: "{snap_common}/etc/neutron/neutron.conf.d/neutron-snap.conf"
-  rchown:
-    "{snap_common}/instances": "snap-nova-hypervisor:snap-nova-hypervisor"
-    "{snap_common}/lib": "snap-nova-hypervisor:snap-nova-hypervisor"
-    "{snap_common}/lock": "snap-nova-hypervisor:snap-nova-hypervisor"
-    "{snap_common}/log": "snap-nova-hypervisor:snap-nova-hypervisor"
-    "{snap_common}/run": "snap-nova-hypervisor:snap-nova-hypervisor"
+  chmod:
+    "{snap_common}/instances": 0755
 entry_points:
   nova-compute:
     binary: "{snap}/bin/nova-compute"
@@ -34,8 +24,6 @@ entry_points:
     config-dirs:
       - "{snap_common}/etc/nova/nova.conf.d"
     log-file: "{snap_common}/log/nova-compute.log"
-    run-as:
-      snap-nova-hypervisor: [snap-nova-hypervisor]
   nova-api-metadata:
     binary: "{snap}/bin/nova-api-metadata"
     config-files:
@@ -45,8 +33,6 @@ entry_points:
     config-dirs:
       - "{snap_common}/etc/nova/nova.conf.d"
     log-file: "{snap_common}/log/nova-api-metadata.log"
-    run-as:
-      snap-nova-hypervisor: [snap-nova-hypervisor]
   neutron-openvswitch-agent:
     binary: "{snap}/bin/neutron-openvswitch-agent"
     config-files:
@@ -58,8 +44,6 @@ entry_points:
     config-dirs:
       - "{snap_common}/etc/neutron/neutron.conf.d"
     log-file: "{snap_common}/log/neutron-openvswitch-agent.log"
-    run-as:
-      snap-nova-hypervisor: [snap-nova-hypervisor]
   neutron-ovs-cleanup:
     binary: "{snap}/bin/neutron-ovs-cleanup"
     config-files:
@@ -68,8 +52,6 @@ entry_points:
       - "{snap_common}/etc/neutron/neutron.conf"
     config-dirs:
       - "{snap_common}/etc/neutron/neutron.conf.d"
-    run-as:
-      snap-nova-hypervisor: [snap-nova-hypervisor]
   neutron-netns-cleanup:
     binary: "{snap}/bin/neutron-netns-cleanup"
     config-files:
@@ -78,8 +60,6 @@ entry_points:
       - "{snap_common}/etc/neutron/neutron.conf"
     config-dirs:
       - "{snap_common}/etc/neutron/neutron.conf.d"
-    run-as:
-      snap-nova-hypervisor: [snap-nova-hypervisor]
   neutron-l3-agent:
     binary: "{snap}/bin/neutron-l3-agent"
     config-files:
@@ -91,8 +71,6 @@ entry_points:
     config-dirs:
       - "{snap_common}/etc/neutron/neutron.conf.d"
     log-file: "{snap_common}/log/neutron-l3-agent.log"
-    run-as:
-      snap-nova-hypervisor: [snap-nova-hypervisor]
   neutron-dhcp-agent:
     binary: "{snap}/bin/neutron-dhcp-agent"
     config-files:
@@ -104,8 +82,6 @@ entry_points:
     config-dirs:
       - "{snap_common}/etc/neutron/neutron.conf.d"
     log-file: "{snap_common}/log/neutron-dhcp-agent.log"
-    run-as:
-      snap-nova-hypervisor: [snap-nova-hypervisor]
   neutron-metadata-agent:
     binary: "{snap}/bin/neutron-metadata-agent"
     config-files:
@@ -117,5 +93,3 @@ entry_points:
     config-dirs:
       - "{snap_common}/etc/neutron/neutron.conf.d"
     log-file: "{snap_common}/log/neutron-metadata-agent.log"
-    run-as:
-      snap-nova-hypervisor: [snap-nova-hypervisor]
