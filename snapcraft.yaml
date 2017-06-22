@@ -115,6 +115,8 @@ parts:
       - libnftnl-dev
     configflags:
       - --disable-nftables
+    install: |
+      cp -f $SNAPCRAFT_PART_INSTALL/sbin/xtables-multi $SNAPCRAFT_PART_INSTALL/bin/iptables-xml
   ipset:
     source: http://ipset.netfilter.org/ipset-6.30.tar.bz2
     plugin: autotools
