@@ -1,0 +1,32 @@
+Description: Drop code where dnsmasq drops privileges from root.
+  This code isn't required because in strict mode we run worker
+  processes as root:root and setuid is not allowed by the current
+  plugs.
+Author: Corey Bryant <corey.bryant@canonical.com>
+Forwarded: no
+
+---
+ src/dnsmasq.c | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/src/dnsmasq.c b/src/dnsmasq.c
+index 045ec53..aaa5c2a 100644
+--- a/src/dnsmasq.c
++++ b/src/dnsmasq.c
+@@ -638,13 +638,6 @@ int main (int argc, char **argv)
+ 	      send_event(err_pipe[1], EVENT_CAP_ERR, bad_capabilities, NULL);
+ 	      _exit(0);
+ 	    }
+-	  
+-	  /* finally drop root */
+-	  if (setuid(ent_pw->pw_uid) == -1)
+-	    {
+-	      send_event(err_pipe[1], EVENT_USER_ERR, errno, daemon->username);
+-	      _exit(0);
+-	    }     
+ 
+ #ifdef HAVE_LINUX_NETWORK
+ 	  if (is_dad_listeners() || option_bool(OPT_CLEVERBIND))
+-- 
+2.11.0
+

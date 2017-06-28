@@ -101,6 +101,13 @@ parts:
   bridge-utils:
     source: https://www.kernel.org/pub/linux/utils/net/bridge-utils/bridge-utils-1.6.tar.gz
     plugin: autotools
+  conntrack-tools:
+    source: http://www.netfilter.org/projects/conntrack-tools/files/conntrack-tools-1.4.3.tar.bz2
+    plugin: autotools
+    build-packages:
+      - libnetfilter-cttimeout-dev
+      - libnetfilter-cthelper0-dev
+      - libnetfilter-queue-dev
   iproute2:
     source: https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-4.9.0.tar.gz
     plugin: autotools
@@ -141,6 +148,36 @@ parts:
     filesets:
       bin:
         - bin/dnsmasq
+    stage: [$bin]
+    prime: [$bin]
+    prepare: |
+      export SNAP_ROOT="../../../"
+      export SNAP_SOURCE="$SNAP_ROOT/parts/dnsmasq/build"
+      patch -d $SNAP_SOURCE -p1 < $SNAP_ROOT/patches/drop-setuid-from-dnsmasq.patch
+  dnsmasq-lease:
+    source: http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.76.tar.xz
+    plugin: make
+    make-parameters:
+      - "-C"
+      - "contrib/lease-tools"
+    build-packages:
+      - libgmp-dev
+      - libidn11-dev
+      - libnetfilter-conntrack-dev
+      - nettle-dev
+    artifacts:
+      - contrib/lease-tools/dhcp_release
+      - contrib/lease-tools/dhcp_release6
+      - contrib/lease-tools/dhcp_lease_time
+    organize:
+      contrib/lease-tools/dhcp_release: bin/dhcp_release
+      contrib/lease-tools/dhcp_release6: bin/dhcp_release6
+      contrib/lease-tools/dhcp_lease_time: bin/dhcp_lease_time
+    filesets:
+      bin:
+        - bin/dhcp_release
+        - bin/dhcp_release6
+        - bin/dhcp_lease_time
     stage: [$bin]
     prime: [$bin]
   openvswitch:
