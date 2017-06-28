@@ -26,7 +26,6 @@ apps:
       - network
       - network-bind
       - firewall-control
-      - system-trace
       - hardware-observe
       - libvirt
       - openvswitch
@@ -47,7 +46,6 @@ apps:
       - network-observe
       - firewall-control
       - process-control
-      - system-trace
       - system-observe
       - openvswitch
   neutron-l3-agent:
@@ -60,7 +58,6 @@ apps:
       - network-observe
       - firewall-control
       - process-control
-      - system-trace
       - system-observe
       - openvswitch
   neutron-dhcp-agent:
@@ -72,7 +69,6 @@ apps:
       - network-control
       - network-observe
       - process-control
-      - system-trace
       - system-observe
       - openvswitch
   neutron-metadata-agent:
