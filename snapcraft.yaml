@@ -194,8 +194,6 @@ parts:
       - python-all
       - python-setuptools
       - python-six
-    stage-packages:
-      - uuid-runtime
     filesets:
       bin:
         - bin/ovs-*ctl
@@ -225,6 +223,7 @@ parts:
       - libxml2-dev
       - libxslt1-dev
     stage-packages:
+      - coreutils
       - qemu-utils
     install: |
       touch $SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages/paste/__init__.py
