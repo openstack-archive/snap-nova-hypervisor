@@ -23,10 +23,12 @@ apps:
     command: snap-openstack nova-compute
     daemon: simple
     plugs:
+      - account-control
+      - kernel-module-control
       - network
       - network-bind
+      - network-control
       - firewall-control
-      - system-trace
       - hardware-observe
       - libvirt
       - openvswitch
@@ -34,6 +36,7 @@ apps:
     command: snap-openstack nova-api-metadata
     daemon: simple
     plugs:
+      - account-control
       - network
       - network-bind
       - firewall-control
@@ -41,44 +44,46 @@ apps:
     command: snap-openstack neutron-openvswitch-agent
     daemon: simple
     plugs:
+      - account-control
       - network
       - network-bind
       - network-control
       - network-observe
       - firewall-control
       - process-control
-      - system-trace
       - system-observe
       - openvswitch
   neutron-l3-agent:
     command: snap-openstack neutron-l3-agent
     daemon: simple
     plugs:
+      - account-control
       - network
       - network-bind
       - network-control
       - network-observe
       - firewall-control
       - process-control
-      - system-trace
       - system-observe
       - openvswitch
   neutron-dhcp-agent:
     command: snap-openstack neutron-dhcp-agent
     daemon: simple
     plugs:
+      - account-control
+      - kernel-module-control
       - network
       - network-bind
       - network-control
       - network-observe
       - process-control
-      - system-trace
       - system-observe
       - openvswitch
   neutron-metadata-agent:
     command: snap-openstack neutron-metadata-agent
     daemon: simple
     plugs:
+      - account-control
       - network
       - network-bind
       - network-control
