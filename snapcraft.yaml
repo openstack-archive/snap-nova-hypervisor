@@ -231,6 +231,8 @@ parts:
       export SNAP_ROOT="../../../"
       export SNAP_SITE_PACKAGES="$SNAPCRAFT_PART_INSTALL/lib/python2.7/site-packages"
       patch -d $SNAP_SITE_PACKAGES -p1 < $SNAP_ROOT/patches/oslo-config-dirs.patch
+      patch -d $SNAP_SITE_PACKAGES -p1 < $SNAP_ROOT/patches/drop-setuid-from-neutron.patch
+      patch -d $SNAP_SITE_PACKAGES -p1 < $SNAP_ROOT/patches/drop-use-of-fchownat.patch
   templates:
     after: [nova]
     plugin: dump
