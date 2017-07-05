@@ -1,0 +1,9 @@
+Code-Review+2: James Page <james.page@canonical.com>
+Workflow+1: James Page <james.page@canonical.com>
+Code-Review+1: Pete Vander Giessen <pete.vandergiessen@canonical.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Wed, 05 Jul 2017 16:42:23 +0000
+Reviewed-on: https://review.openstack.org/480658
+Project: openstack/snap-nova-hypervisor
+Branch: refs/heads/master
