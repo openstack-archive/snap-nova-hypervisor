@@ -113,7 +113,6 @@ The nova-hypervisor snap uses privileged interfaces that are not auto-connected
 at install time. In order to grant access to these privileged interfaces, the
 following plugs and slots must be connected:
 
-    sudo snap connect nova-hypervisor:system-trace core:system-trace
     sudo snap connect nova-hypervisor:hardware-observe core:hardware-observe
     sudo snap connect nova-hypervisor:system-observe core:system-observe
     sudo snap connect nova-hypervisor:process-control core:process-control
