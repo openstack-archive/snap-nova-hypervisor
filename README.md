@@ -122,13 +122,6 @@ following plugs and slots must be connected:
     sudo snap connect nova-hypervisor:network-control core:network-control
     sudo snap connect nova-hypervisor:firewall-control core:firewall-control
 
-The nova-hypervisor snap has alias support that enables use of the well-known
-neutron-netns-cleanup and neutron-ovs-cleanup commands. To enable the aliases,
-run the following prior to using the commands:
-
-    sudo snap alias nova-hypervisor.neutron-netns-cleanup neutron-netns-cleanup
-    sudo snap alias nova-hypervisor.neutron-ovs-cleanup neutron-ovs-cleanup
-
 ## Restarting services
 
 To restart all nova-hypervisor services:

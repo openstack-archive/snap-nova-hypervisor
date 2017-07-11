@@ -81,16 +81,12 @@ apps:
       - network-control
   neutron-ovs-cleanup:
     command: snap-openstack neutron-ovs-cleanup
-    aliases:
-      - neutron-ovs-cleanup
     plugs:
       - network
       - network-control
       - openvswitch
   neutron-netns-cleanup:
     command: snap-openstack neutron-netns-cleanup
-    aliases:
-      - neutron-netns-cleanup
     plugs:
       - network
       - network-control
