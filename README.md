@@ -107,21 +107,6 @@ files located in $SNAP, or add those to $SNAP_COMMON as well.
 The services for the nova-hypervisor snap will log to its $SNAP_COMMON writable area:
 /var/snap/nova-hypervisor/common/log.
 
-## Managing nova-hypervisor
-
-The nova-hypervisor snap uses privileged interfaces that are not auto-connected
-at install time. In order to grant access to these privileged interfaces, the
-following plugs and slots must be connected:
-
-    sudo snap connect nova-hypervisor:hardware-observe core:hardware-observe
-    sudo snap connect nova-hypervisor:system-observe core:system-observe
-    sudo snap connect nova-hypervisor:process-control core:process-control
-    sudo snap connect nova-hypervisor:openvswitch core:openvswitch
-    sudo snap connect nova-hypervisor:libvirt core:libvirt
-    sudo snap connect nova-hypervisor:network-observe core:network-observe
-    sudo snap connect nova-hypervisor:network-control core:network-control
-    sudo snap connect nova-hypervisor:firewall-control core:firewall-control
-
 ## Restarting services
 
 To restart all nova-hypervisor services:
