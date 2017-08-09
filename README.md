@@ -20,7 +20,7 @@ Neutron plugin.
 
 The nova-hypervisor snap can be installed directly from the snap store:
 
-    sudo snap install --edge nova-hypervisor
+    sudo snap install --channel=ocata/edge nova-hypervisor
 
 The nova-hypervisor snap is working towards publication across tracks for
 OpenStack releases. The edge channel for each track will contain the tip
