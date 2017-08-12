@@ -19,6 +19,17 @@ class SnapstackTest(unittest.TestCase):
             snap='nova-hypervisor',
             script_loc='./tests/',
             scripts=['nova-hypervisor.sh'],
+            files=[
+                'etc/snap-nova-hypervisor/nova/nova.conf.d/glance.conf',
+                ('etc/snap-nova-hypervisor/nova/nova.conf.d/'
+                 'nova-placement.conf'),
+                'etc/snap-nova-hypervisor/nova/nova.conf.d/keystone.conf',
+                'etc/snap-nova-hypervisor/nova/nova.conf.d/rabbitmq.conf',
+                'etc/snap-nova-hypervisor/nova/nova.conf.d/neutron.conf',
+                ('etc/snap-nova-hypervisor/neutron/plugins/ml2/'
+                 'openvswitch_agent.ini'),
+                'etc/snap-nova-hypervisor/neutron/metadata_agent.ini',
+            ]
             snap_store=False)))
 
         # Execute the snapstack tests
