@@ -1,0 +1,10 @@
+Code-Review+1: wang zhiming <wangzm49@chinaunicom.cn>
+Code-Review+1: Ryan Beisner <ryan.beisner@canonical.com>
+Code-Review+2: Dmitrii Shcherbakov <dmitrii.shcherbakov@canonical.com>
+Workflow+1: Dmitrii Shcherbakov <dmitrii.shcherbakov@canonical.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Mon, 14 Aug 2017 20:40:00 +0000
+Reviewed-on: https://review.openstack.org/493307
+Project: openstack/snap-nova-hypervisor
+Branch: refs/heads/master
