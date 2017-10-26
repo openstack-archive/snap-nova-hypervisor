@@ -9,5 +9,9 @@ snap aliases nova-hypervisor | grep neutron-ovs-cleanup || \
 snap aliases nova-hypervisor | grep neutron-netns-cleanup || \
     sudo snap alias nova-hypervisor.neutron-netns-cleanup neutron-netns-cleanup
 
-sudo neutron-ovs-cleanup
-sudo neutron-netns-cleanup
+if [ hash neutron-ovs-cleanup ]; then
+    sudo neutron-ovs-cleanup
+fi
+if [ hash neutron-netns-cleanup ]; then
+    sudo neutron-netns-cleanup
+fi
